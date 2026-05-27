@@ -1,37 +1,3 @@
-#!/usr/bin/env python3
-"""
-spot_bot.py — Spot Market Maker Bot for Binance
-
-Multi-symbol spot grid market maker.
-Two grids per symbol: BUY (below price) and SELL (above price).
-Grids close each other = natural TP.
-
-Architecture (строго по репозитарию binance-connector-python):
-  - WS API (SpotWebSocketAPI): ALL trading operations (place/cancel orders),
-    account info, commission, exchange info, User Data Stream
-  - WS Streams (SpotWebSocketStreams): bookTicker for real-time price updates
-  - User Data Stream: executionReport для мгновенной реакции на исполнения
-    Подписка: userDataStream.subscribe.signature → RequestStreamHandle.on("message", cb)
-    Callback получает UserDataStreamEventsResponse → .actual_instance → ExecutionReport
-  - REST: fallback only if WS API fails
-
-HMAC-SHA256 keys work with WS API for all signed requests.
-Only session.logon requires Ed25519 — we don't use it;
-userDataStream.subscribe.signature подписывает каждый запрос индивидуально.
-
-All parameters from env. Decimal everywhere. Zero hardcode.
-
-Математика (из design-сессии):
-  - Шаг ≥ 0.2% (при комиссии 0.075% × 2 = 0.15% с BNB → чистая прибыль 0.05%)
-  - BNB обязателен, без него стратегия в ноль/минус
-  - LIMIT ордера (не LIMIT_MAKER) — комиссии одинаковые
-  - BUY fill → сдвигаем SELL-сетку (anchor = fill_price)
-  - SELL fill → сдвигаем BUY-сетку (anchor = fill_price)
-  - Сетки закрывают друг друга = TP не нужен отдельно
-  - При SELL: qty = фактически полученный BTC (за вычетом комиссии BUY)
-  - realized_pnl считается при каждом SELL fill
-"""
-
 import asyncio
 import json
 import logging
