@@ -1,0 +1,33 @@
+# ============================================================
+# Spot Market Maker Bot — Python Dependencies
+# ============================================================
+#
+# Install:
+#   pip install -r spot_bot_requirements.txt
+#
+# Or install SDK from local repo (editable, recommended for dev):
+#   pip install -e ./binance-connector-python/common
+#   pip install -e ./binance-connector-python/clients/spot
+#
+# ============================================================
+
+# --- Core ---
+python-dotenv>=1.0
+
+# --- Binance SDK ---
+# binance-sdk-spot pulls in binance-common automatically.
+# If using editable installs from the local repo, comment these out
+# and use the -e commands shown above instead.
+binance-common>=3.9
+binance-sdk-spot>=9.0
+
+# --- SDK transitive dependencies (listed explicitly for reproducibility) ---
+# These are installed automatically by the packages above,
+# but pinning them here ensures consistent environments.
+pydantic>=2.0
+aiohttp>=3.9
+websockets>=11.0
+websocket-client>=1.0
+pycryptodome>=3.19
+requests>=2.31
+urllib3>=2.0
